@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <title>Force.com Canvas Node.js Quick Start</title>
+
+        <link rel="stylesheet" href="/css/bootstrap.css"/>
+        <link rel="stylesheet" href="/css/bootstrap-responsive.min.css"/>
+        <link rel="stylesheet" href="/css/service.css"/>
+
+        <script type="text/javascript" src="js/canvas-all.js"></script>
+        <script type="text/javascript" src="js/json2.js"></script>
+        <script type="text/javascript" src="js/chatter-talk.js"></script>
+
+        <script>
+
+            Sfdc.canvas(function() {
+                var sr = <%- signedRequestJson %>
+                // Save the token
+                Sfdc.canvas.oauth.token(sr.oauthToken);
+                var photoUri = sr.context.user.profileThumbnailUrl +  "?oauth_token=" + sr.oauthToken;
+                Sfdc.canvas.byId('fullname').innerHTML = sr.context.user.fullName + "[" + sr.context.user.email + "]";
+                Sfdc.canvas.byId('profile').src = (photoUri.indexOf("http")==0 ? "" :sr.instanceUrl) + photoUri;
+                Sfdc.canvas.byId('firstname').innerHTML = sr.context.user.firstName;
+                Sfdc.canvas.byId('lastname').innerHTML = sr.context.user.lastName;
+                Sfdc.canvas.byId('username').innerHTML = sr.context.user.userName;
+                Sfdc.canvas.byId('email').innerHTML = sr.context.user.email;
+                Sfdc.canvas.byId('company').innerHTML = sr.context.organization.name;
+
+                chatterTalk.init(sr, "chatter-submit", "speech-input-field", function(data) {
+                    Sfdc.canvas.byId('status').innerHTML = data.statusText;
+                });
+            });
+
+        </script>
+    </head>
+    <body style="width: 516px">
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+              <div class="navbar-header">
+                <div class="navbar-brand" style="margin-left: 40px;">
+                    Canvas Action
+                </div>
+                <ul class="nav"></ul>
+              </div>
+            </div>
+        </div>
+        <div class="jumbotron">
+            <div class="container">
+                <div>
+                    <p class="lead">
+                        Welcome to the Force.com Canvas Node.js Quick Start Template!
+                    </p>
+                </div>
+            </div>
+            <div class="container">
+                <div >
+                    <p class="lead">
+                        Below is some information received in the Canvas Request:
+                    </p>
+                    <div style="max-height: 400px; max-width: 370px; overflow: scroll;">
+                        <div class="well" id="canvas-request">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img id='profile' border="0" src="" />
+                                </div>
+                                <div class="col-md-3">
+                                    <span id='fullname'></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label><b>First Name: </b></label>
+                                    <span id='firstname'></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label><b>Last Name: </b></label>
+                                    <span id='lastname'></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label><b>Username: </b></label>
+                                    <span id='username'></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label><b>Email Address: </b></label>
+                                    <span id='email'></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label><b>Company: </b></label>
+                                    <span id='company'></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="well" id="canvas-chatter">
+                        <div class="form-inline" role="form">
+                        <label for="speech-input-field">
+                            <b>
+                                Post to Chatter:&nbsp
+                            </b>
+                        </label>
+                        <input id="speech-input-field" type="text" x-webkit-speech placeholder="Share something" />
+                        <button class="btn btn-default"  id="chatter-submit" type="submit"/>Post</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
